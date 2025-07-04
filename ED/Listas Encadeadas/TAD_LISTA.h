@@ -1,0 +1,135 @@
+#ifndef TAD_LISTA
+#define TAD_LISTA
+
+    #include <stdio.h>
+    #include <stdlib.h>
+
+    //Tipos Exportados
+
+    struct lista{
+        int dado;
+        struct lista* prox;
+    };
+
+    typedef struct lista Lista;
+
+    //Funções Exportadas
+
+    Lista* cria();
+    Lista* lst_insere(Lista* l, int i);
+    void lst_imprime(Lista* l);
+    int lst_comprimento(Lista* l);
+    int qtd_maior_n(Lista* l, int n);
+    int lst_ultimo_no(Lista* l);
+    Lista* concatena(Lista* l1, Lista* l2);
+    Lista* lst_tira_valor(Lista* l, int n);
+
+    Lista* cria(){
+        return NULL;
+    }
+
+    Lista* lst_insere(Lista* l, int i){
+        
+        Lista* novo = (Lista*)malloc(sizeof(Lista));
+        
+        if(!novo){  // Verifica se a alocação foi bem-sucedida
+            printf("Não foi possível inserir novo elemento...\n");
+            exit(1);  // Encerra o programa caso não consiga alocar memória
+        }
+
+        novo->dado = i;  // Atribui o valor ao campo 'info' do novo nó
+        novo->prox = l;  // O ponteiro 'prox' do novo nó aponta para o início da lista (pode ser NULL)
+
+        return novo;  // Retorna o novo nó que agora é o início da lista
+
+    }
+
+    void lst_imprime(Lista* l){
+        
+        Lista* p;
+
+        for(p = l; p != NULL; p = p->prox){
+            printf("%d ", p->dado);
+        }
+    }
+
+    int lst_comprimento(Lista* l){
+
+        Lista* p;
+        int i=0;
+
+        for(p = l; p != NULL; p = p->prox){
+            i++;
+        }
+        return i;
+    }
+
+    int qtd_maior_n(Lista* l, int n){
+
+        Lista* p;
+        int i=0;
+
+        for(p = l; p != NULL; p = p->prox){     
+            if(p->dado > n)
+                i++;
+        }
+
+        return i;
+    }
+
+    int lst_ultimo_no(Lista* l){
+
+        Lista* p;
+        Lista* u;
+
+        for(p = l; p != NULL; p = p->prox){
+            if(p->prox == NULL){
+                u = p;
+            }
+        }
+        
+        return u->dado;
+    }
+
+    Lista* concatena(Lista* l1, Lista* l2){
+
+            Lista* p = l1;
+
+            if(l1 == NULL)
+                return l2;
+
+            while(p->prox != NULL){
+                p = p->prox;
+            }
+            
+            p->prox = l2;
+
+        return l1;
+
+    }
+
+    Lista* lst_tira_valor(Lista* l, int n){
+
+        Lista* ant = NULL; //Ponteiro que aponta para o nó anterior
+        Lista* p = l; //Ponteiro p para auxiliar na navegação da lista
+
+        while(p != NULL && p->dado != n){ //Percorre a lista verificiando se a posição atual da lista é diferente de n
+            ant = p; //Se for diferente de n, o nó atual vai para posição anterior
+            p = p->prox; //E a posição atual recebe o próximo
+        }
+
+        if (p == NULL) //Se o valor não foi encontrado
+            return l; //Retorna a lista original
+
+        if(ant == NULL){ // Se o valor a ser removido é o primeiro da lista
+            l = p->prox; // O início da lista passa a ser o segundo nó
+        }
+        else {
+            ant->prox = p->prox; // O nó anterior agora aponta para o próximo do nó removido
+        }
+        free(p); //Libera a memória alocada do nó removido
+        return l;  
+    }
+
+    #define TESTETAD.c
+#endif
